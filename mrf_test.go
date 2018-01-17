@@ -15,7 +15,7 @@ type X struct {
 func TestReduce(t *testing.T) {
 	var y map[string]*interface{} = FakeMap()
 
-	r := NewShardReduce(y)
+	r := NewShardReduce(&y)
 
 	dones := r.Map(func(key string, input interface{}) interface{} {
 		fmt.Printf("%#v\n", input)
