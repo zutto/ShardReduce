@@ -13,59 +13,49 @@ type X struct {
 }
 
 func TestReduce(t *testing.T) {
-	var y []*interface{} = FakeMap()
+	var y map[string]*interface{} = FakeMap()
 
 	r := NewShardReduce(y)
 
-	dones := r.Map(func(input X) X {
+	dones := r.Map(func(key string, input interface{}) interface{} {
 		fmt.Printf("%#v\n", input)
 		y := input
 		return y
-	}).Filter(func(input *interface{}) bool {
+	}).Filter(func(key string, input interface{}) bool {
 		rand.Seed(time.Now().UnixNano())
 		rnd := rand.Intn(100)
-		fmt.Printf("\n---\n")
 		if rnd > 50 {
 			return true
 		} else {
 			return false
 		}
-	}).Filter(func(input *interface{}) bool {
+	}).Filter(func(key string, input interface{}) bool {
 		rand.Seed(time.Now().UnixNano())
 		rnd := rand.Intn(100)
-		fmt.Printf("\n---\n")
 		if rnd > 50 {
 			return true
 		} else {
 			return false
 		}
-	}).Map(func(input X) X {
+	}).Map(func(key string, input interface{}) interface{} {
 		y := input
 		fmt.Printf("%#v\n", input)
 		return y
-	}).Reduce(func(start X, n X) X {
-		var brandNew X = X{start.a + n.a, start.b + n.b}
+	}).Reduce(func(startkey string, start interface{}, key string, ne interface{}) interface{} {
+		var brandNew X = X{start.(X).a + ne.(X).a, start.(X).b + ne.(X).b}
 		return brandNew
-		/*if n == nil {
-			return start
-		}
-		var st X = (*start).(X)
-		var ne X = (*n).(X)
-		var brandNew interface{} = X{st.a + ne.a, st.b + ne.b}
-		return &brandNew*/
-
 	})
 
-	fmt.Printf("---\nresult: %#v", *dones)
+	fmt.Printf("---\nresult: %#v", dones)
 
 }
 
-func FakeMap() []*interface{} {
-	x := make([]*interface{}, 0)
+func FakeMap() map[string]*interface{} {
+	x := make(map[string]*interface{})
 	for y := 0; y < 25; y++ {
 		var q interface{}
 		q = X{y, y + 1}
-		x = append(x, &q)
+		x[fmt.Sprint("%d", y*5534)] = &q
 	}
 
 	return x
