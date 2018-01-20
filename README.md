@@ -1,8 +1,3 @@
-*WIP*
+** Package integrated into https://github.com/zutto/shardedmap **
 
-just made this in 5 seconds as a poc before i go to work..
-
-i'll work on this later!
-
-
-(this is heavily inspired by glow ^^)
+this github repo will be removed soon.. as i manage to get dependencies out of my projects ^^^

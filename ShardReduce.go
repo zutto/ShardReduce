@@ -12,11 +12,15 @@ func NewShardReduce(input *map[string]*interface{}) *ShardReduce {
 	return &x
 }
 
+func (sr *ShardReduce) NewInput(input *map[string]*interface{}) *ShardReduce {
+	sr.input = input
+	return sr
+}
+
 func (sr *ShardReduce) Filter(fFunc func(string, interface{}) bool) *ShardReduce {
 	tempStock := make(map[string]*interface{})
 	for k, v := range *sr.input {
-		r := fFunc(k, *v)
-		if r == true {
+		if fFunc(k, *v) == true {
 			tempStock[k] = v
 		}
 	}
